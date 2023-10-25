@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "genealogy-ssr", "genealogy-ssr\genealogy-ssr.csproj", "{769FF2CA-45D6-404B-B8DF-65E8051DD8E9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{769FF2CA-45D6-404B-B8DF-65E8051DD8E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{769FF2CA-45D6-404B-B8DF-65E8051DD8E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{769FF2CA-45D6-404B-B8DF-65E8051DD8E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{769FF2CA-45D6-404B-B8DF-65E8051DD8E9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {78C89736-0F23-4D8C-B547-C98297F7F2AD}
+	EndGlobalSection
+EndGlobal
