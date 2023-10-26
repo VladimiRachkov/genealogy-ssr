@@ -1,0 +1,12 @@
+<ng-template #content let-modal>
+  <div class="modal-header">
+    Название страницы
+  </div>
+  <div class="modal-body">
+    <ckeditor [editor]="Editor" [config]="editorConfig" [(ngModel)]="htmlContent"></ckeditor>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('cancel')">Отменить</button>
+    <button type="button" class="btn btn-outline-rimary" (click)="modal.close('save')">Сохранить</button>
+  </div>
+</ng-template>

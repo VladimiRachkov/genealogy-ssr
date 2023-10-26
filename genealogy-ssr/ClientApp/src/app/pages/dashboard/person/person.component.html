@@ -1,0 +1,152 @@
+<div class="row pt-2">
+  <div class="col-md-6 col-lg-8">
+    <form
+      class="form-inline md-form mr-auto mb-4"
+      [formGroup]="searchForm"
+    >
+      <input class="form-control mr-2" type="text" placeholder="Введите ФИО" aria-label="Name" formControlName="fio" required />
+
+      <ng-select
+        class="mr-2 custom"
+        [items]="counties"
+        bindLabel="name"
+        bindValue="id"
+        id="county"
+        aria-label="County"
+        formControlName="countyId"
+        placeholder="Выбрать уезд"
+        (change)="onChangeCounty()"
+      >
+      </ng-select>
+
+      <ng-select
+        *ngIf="selectedCountyId != null"
+        class="mr-2 custom"
+        [items]="cemeteries"
+        bindLabel="name"
+        bindValue="id"
+        id="cemetery"
+        aria-label="Cemetery"
+        formControlName="cemeteryId"
+        placeholder="Выбрать место захоронения"
+      >
+      </ng-select>
+    </form>
+  </div>
+  <div class="col-md-6 col-lg-8">
+    <lancet-table
+      [data]="tableData"
+      [selectedId]="person?.id"
+      (change)="onSelect($event)"
+      (remove)="onRemove($event)"
+      (restore)="onRestore($event)"
+      [showActionButtons]="true"
+    ></lancet-table>
+  </div>
+  <div class="col-md-6 col-lg-4">
+    <form>
+      <div class="form-group">
+        <label for="docFile">Загрузить Word документ</label>
+        <input
+          type="file"
+          class="form-control-file"
+          (change)="onUploadDocFile($event.target.files)"
+          id="docFile"
+          accept="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        />
+      </div>
+    </form>
+    <form [formGroup]="personForm" (ngSubmit)="onAdd()">
+      <div class="form-group">
+        <label for="lastname">Фамилия</label>
+        <input
+          type="text"
+          class="form-control"
+          id="lastname"
+          aria-describedby="lastname"
+          placeholder="Введите фамилию"
+          formControlName="lastname"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="firstname">Имя</label>
+        <input
+          type="text"
+          class="form-control"
+          id="firstname"
+          aria-describedby="firstname"
+          placeholder="Введите имя"
+          formControlName="firstname"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="patronymic">Отчество</label>
+        <input
+          type="text"
+          class="form-control"
+          id="patronymic"
+          aria-describedby="patronymic"
+          placeholder="Введите имя"
+          formControlName="patronymic"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="startDate">Дата рождения</label>
+        <input
+          type="text"
+          class="form-control"
+          id="startDate"
+          aria-describedby="startDate"
+          placeholder="Введите имя"
+          formControlName="startDate"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="finishDate">Дата смерти</label>
+        <input
+          type="text"
+          class="form-control"
+          id="finishDate"
+          aria-describedby="finishDate"
+          placeholder="Введите имя"
+          formControlName="finishDate"
+        />
+      </div>
+
+      <div class="form-group" *ngIf="cemeteryList$ | async as cemeteryList">
+        <label for="finishDate">Место захоронения</label>
+        <select class="form-control" formControlName="cemeteryId">
+          <option *ngFor="let item of cemeteryList" [value]="item.id">{{ item.name }}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="source">Источник информации</label>
+        <input type="text" class="form-control" id="source" aria-describedby="source" placeholder="" formControlName="source" />
+      </div>
+
+      <div class="form-group">
+        <label for="comment">Дополнительная информация</label>
+        <textarea class="form-control" formControlName="comment"> </textarea>
+      </div>
+
+      <input type="hidden" formControlName="id" />
+      <div class="btn-group" role="group" aria-label="Basic example">
+        <button type="submit" class="btn btn-outline-primary" [disabled]="personForm.invalid || person">Добавить</button>
+        <button
+          type="button"
+          class="btn btn-outline-primary"
+          [disabled]="!(person !== null && !personForm.invalid && personForm.dirty)"
+          (click)="onUpdate()"
+        >
+          Сохранить
+        </button>
+        <button type="reset" class="btn btn-outline-primary">Новая запись</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -13,7 +13,7 @@ import { APP_BASE_HREF } from '@angular/common';
 import { enableProdMode, StaticProvider } from '@angular/core';
 import { createServerRenderer } from 'aspnet-prerendering';
 import { BOOT_FUNC_PARAMS } from '@mintplayer/ng-base-url';
-import { DATA_FROM_SERVER } from './app/providers/data-from-server';
+//import { DATA_FROM_SERVER } from './app/providers/data-from-server';
 import { AppServerModule } from './app/app.server.module';
 
 enableProdMode();
@@ -22,7 +22,7 @@ export { AppServerModule } from './app/app.server.module';
 export default createServerRenderer(params => {
 	const providers: StaticProvider[] = [
 		{ provide: BOOT_FUNC_PARAMS, useValue: params },
-		{ provide: DATA_FROM_SERVER, useValue: params.data }
+		//{ provide: DATA_FROM_SERVER, useValue: params.data }
 	];
 
 	const options = {

@@ -1,0 +1,6 @@
+export enum USER_STATUS {
+  NOT_CONFIRMED = 'NOT_CONFIRMED',
+  ACTIVE = 'ACTIVE',
+  BLOCKED = 'BLOCKED',
+  PAID = 'PAID',
+}

@@ -1,0 +1,9 @@
+@import 'node_modules/sass-rem';
+
+.close {
+    cursor: pointer;
+    outline: none;
+    span {
+        font-size: rem(20px);
+    }
+}

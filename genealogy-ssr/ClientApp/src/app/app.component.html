@@ -1,22 +1,26 @@
-<bs-navbar [color]="colors.dark" #nav>
-	<bs-navbar-toggler *bsExpandButton="let state" [state]="state" [toggleOnClick]="false"></bs-navbar-toggler>
-	<bs-navbar-brand [routerLink]='["/"]'>
-		<span class="brand d-block px-3">
-			genealogy_ssr
-		</span>
-	</bs-navbar-brand>
-	<bs-navbar-nav [collapse]="true">
-		<bs-navbar-item>
-			<a [routerLink]='["/"]'>Home</a>
-		</bs-navbar-item>
-		<bs-navbar-item>
-			<a [routerLink]='["/counter"]'>Counter</a>
-		</bs-navbar-item>
-		<bs-navbar-item>
-			<a [routerLink]='["/fetch-data"]'>Fetch data</a>
-		</bs-navbar-item>
-	</bs-navbar-nav>
-</bs-navbar>
-<div [bsNavbarContent]="nav" style="padding-top:10px">
-	<router-outlet></router-outlet>
-</div>
+<notifier-container></notifier-container>
+<main role="main" class="container pr-0 pl-0 bg-white border-bottom-0 top-shadow">
+  <div class="row">
+    <div class="col-12">
+      <div class="header"></div>
+    </div>
+    <div class="col-12 text-center">
+      <!-- <div class="alert alert-warning mt-2" role="alert">
+        <strong>Внимание!</strong> Сайт находится в тестовом режиме, доступ к ресурсам может быть временно ограничен.
+      </div> -->
+      <app-nav-bar></app-nav-bar>
+    </div>
+    <div class="col-12 pt-4 pb-2 content top-shadow bottom-shadow">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</main>
+<footer class="footer">
+  <div class="container text-center pt-4">
+    <p class="text-muted">
+      ©2023 KALUGA-GENEALOGIA.RU<br />
+      ИП Куликова М. В. ОГРНИП 318402700028444 ИНН 402901448258
+    </p>
+  </div>
+</footer>
+<ngx-spinner bdColor="rgba(255,255,255,0)" size="medium" color="grey" type="ball-clip-rotate"></ngx-spinner>

@@ -1,0 +1,5 @@
+<div class="card p-2 m-2">
+  <app-table-item [item]="item" class="card-body">
+  </app-table-item>
+  <app-table-item *ngFor="let child of item.childs" [item]="child" class="card-body"></app-table-item>
+</div>

@@ -1,0 +1,125 @@
+<div class="row justify-content-center">
+  <div class="col-12 text-center" *ngIf="tableData == null">
+    <div class="alert alert-danger" role="alert">
+      В настоящий момент производится наполнение базы данных, представленная информация может быть неполной.<br />
+      Для получения дополнительной информации вы можете напрямую связаться со мной: <br />
+      <a href="mailto:milaashk@mail.ru">milaashk@mail.ru</a>
+    </div>
+    <div class="col-12">
+      <span class="lead text-uppercase">Количество записей в некрополе</span>
+    </div>
+    <div class="col-12 mt-2 mb-4 odometer-container">
+      <div #odometer></div>
+    </div>
+  </div>
+  
+  <div class="col-12" *ngIf="tableData == null">
+    <p class="pl-4 pr-4 ml-4 mr-4">
+      Теперь собранные мной данные доступны онлайн. Сразу же после регистрации и оплаты абонентской платы (250 рублей) Вы получаете доступ к
+      базе на 1 месяц. Информацию о пополнении базы данных новыми некрополями будут получать все зарегистрированные пользователи.
+    </p>
+  </div>
+  
+  <div class="col-6 pt-2" *ngIf="hasAuth; else regButton">
+    <form
+      [formGroup]="searchForm"
+      (ngSubmit)="onSearch()"
+      *ngIf="hasSubscription; else needSubscription"
+    >
+
+      <div class="mb-3 row">
+        <label for="staticEmail" class="col-sm-4 col-form-label">ФИО:</label>
+        <div class="col-sm-8">
+          <input class="form-control"
+            type="text" 
+            aria-label="Name" 
+            formControlName="fio" 
+            required 
+          />
+        </div>
+      </div>
+
+      
+      <div class="mb-3 row">
+        <label for="staticEmail" class="col-sm-4 col-form-label">Уезд:</label>
+        <div class="col-sm-8">
+        <ng-select
+          class="custom"
+          [items]="counties"
+          bindLabel="name"
+          bindValue="id"
+          id="county"
+          aria-label="County"
+          formControlName="countyId"
+          placeholder="Выберите уезд"
+          (change)="onChangeCounty()"
+        >
+        </ng-select>
+        </div>
+      </div>
+
+      <div class="mb-3 row" *ngIf="countyId != null">
+        <label for="staticEmail" class="col-sm-4 col-form-label">Название захоронения</label>
+        <div class="col-sm-8">
+          <ng-select
+            class="custom"
+            [items]="cemeteries"
+            bindLabel="name"
+            bindValue="id"
+            id="cemetery"
+            aria-label="Cemetery"
+            formControlName="cemeteryId"
+            placeholder="Укажите название захоронения"
+            (disabled)="true"
+          >
+          </ng-select>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <button class="btn btn-primary outline-primary text-uppercase" type="submit">
+          <fa-icon icon="search"></fa-icon>
+          Поиск
+        </button>
+      </div>
+    </form>
+
+    <ng-template #needSubscription>
+      <div class="card p-4">
+        <div class="alert alert-warning">
+          <h4 class="alert-heading">ВНИМАНИЕ!</h4>
+          Для того, что бы воспользоваться поиском по базе данных некрополей необходимо оплатить подписку.
+        </div>
+        <button class="btn btn-primary text-uppercase" [routerLink]="['/catalog']">Перейти в магазин</button>
+      </div>
+    </ng-template>
+  </div>
+
+  <div class="col-md-8 col-sm-10 col-xs-12">
+    <ng-container *ngIf="tableData">
+      <necropolis-table [data]="tableData"  *ngIf="tableData.items.length > 0; else emptyList"></necropolis-table>
+      <ng-template #emptyList>
+        <h4 class="text-center">Записей не найдено</h4>
+      </ng-template>
+    </ng-container>
+
+    <ng-template #regButton>
+      <button class="btn btn-link text-uppercase" [routerLink]="['/login']"><u>Войти или зарегистрироваться</u></button>
+    </ng-template>
+  </div>
+
+  <div class="col-12 mt-4">
+    <p class="pl-4 pr-4 ml-4 mr-4">
+      Если Вы не нашли сведений о нужных Вам захоронениях или необходимый Вам некрополь еще не создан, то Вы можете обратиться ко мне для
+      заказа некрополистического исследования!
+    </p>
+  </div>
+
+  <div class="col-12 text-center pb-4">
+    <button class="btn btn-outline-secondary text-uppercase" (click)="onOrderButtonClick()">
+      Заказать некрополистическое исследование
+    </button>
+  </div>
+</div>
+
+<app-feedback></app-feedback>

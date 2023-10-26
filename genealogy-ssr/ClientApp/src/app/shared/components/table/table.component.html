@@ -1,0 +1,41 @@
+<table class="table table-striped" *ngIf="data?.items?.length > 0; else emptyList">
+  <thead>
+    <tr>
+      <th scope="col">№</th>
+      <th scope="col" *ngFor="let field of data?.fields">{{ field }}</th>
+      <th scope="col" *ngIf="showActionButtons"></th>
+      <th scope="col" *ngIf="data.items[0].status">Статус</th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-container *ngFor="let item of data?.items; let itemIndex = index">
+      <tr (click)="onSelect(item.id)" [ngClass]="{ 'text-primary': item.id == selectedId, removed: item.isRemoved }">
+        <th scope="row">{{ startIndex + itemIndex + 1 }}</th>
+        <td *ngFor="let val of item.values">
+          {{ val }}
+        </td>
+        <td class="d-flex flex-column align-items-center" *ngIf="showActionButtons">
+          <a (click)="onRestore(item.id)" *ngIf="item.isRemoved">
+            <fa-icon class="icon restore" icon="trash-restore"></fa-icon>
+          </a>
+
+          <a (click)="onRemove(item.id)">
+            <fa-icon class="icon remove" icon="times"></fa-icon>
+          </a>
+        </td>
+        <td>
+          <span *ngIf="item.status" [ngSwitch]="item.status">
+            <fa-icon class="text-success" icon="check" *ngSwitchCase="'Succeeded'"></fa-icon>
+            <fa-icon class="text-danger" icon="hourglass" *ngSwitchCase="'Pending'"></fa-icon>
+            <ng-container *ngSwitchDefault>{{ item.status }}</ng-container>
+          </span>
+        </td>
+      </tr>
+    </ng-container>
+  </tbody>
+</table>
+<ng-template #emptyList>
+  <h6 class="mt-4 mb-4 text-center">
+    Записей не найдено
+  </h6>
+</ng-template>

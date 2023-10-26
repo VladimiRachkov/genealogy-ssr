@@ -1,11 +1,22 @@
+using AutoMapper;
+using Genealogy.Models;
+using Genealogy.Repository.Abstract;
+using Genealogy.Repository.Concrete;
+using Genealogy.Service.Astract;
+using Genealogy.Service.Concrete;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using MintPlayer.AspNetCore.Hsts;
 using MintPlayer.AspNetCore.SpaServices.Prerendering;
 using MintPlayer.AspNetCore.SpaServices.Routing;
 using MintPlayer.AspNetCore.SubDirectoryViews;
+using System.Text;
 using WebMarkupMin.AspNetCore7;
 
 var builder = WebApplication.CreateBuilder(args);
+var appSettings = builder.Configuration.GetRequiredSection("AppSettings").GetChildren().AsEnumerable();
 builder.Services.AddControllersWithViews();
 builder.Services.AddSpaStaticFiles(options =>
 {
@@ -31,8 +42,50 @@ builder.Services.AddWebMarkupMin(options =>
 	options.MinificationSettings.MinifyEmbeddedJsonData = true;
 	options.MinificationSettings.WhitespaceMinificationMode = WebMarkupMin.Core.WhitespaceMinificationMode.Aggressive;
 });
-builder.Services.AddScoped<genealogy_ssr.Services.IWeatherForecastService, genealogy_ssr.Services.WeatherForecastService>();
+
+builder.Services.AddHttpContextAccessor();
+
+var connection = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<GenealogyContext>(options => options.UseNpgsql(connection));
+builder.Services.AddHostedService<PurchaseManageService>();
+
+builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IGenealogyService, GenealogyService>();
+
+builder.Services.AddScoped<DbContext, GenealogyContext>();
+
+
 builder.Services.ConfigureViewsInSubfolder("Server");
+
+// Auto Mapper Configurations
+var mappingConfig = new MapperConfiguration(cfg =>
+{
+	cfg.AddProfile<AutoMapperProfile>();
+});
+
+IMapper mapper = mappingConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
+
+var secretKey = appSettings.FirstOrDefault(i => i.Key == "Secret").Value;
+var key = Encoding.ASCII.GetBytes(appSettings.FirstOrDefault(i => i.Key == "Secret").Value);
+builder.Services.AddAuthentication(opt =>
+{
+	opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+	opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(x =>
+{
+	x.RequireHttpsMetadata = false;
+	x.SaveToken = true;
+	x.TokenValidationParameters = new TokenValidationParameters
+	{
+		ValidateIssuerSigningKey = true,
+		IssuerSigningKey = new SymmetricSecurityKey(key),
+		ValidateIssuer = false,
+		ValidateAudience = false
+	};
+});
 
 var app = builder.Build();
 
