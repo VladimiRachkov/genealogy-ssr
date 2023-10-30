@@ -9,7 +9,7 @@ export class AppComponent {
   title = 'Генеалогия';
   message = '';
 
-  constructor(@Inject('MESSAGE') message: string) {
-    this.message = message;
-  }
+  // constructor(@Inject('MESSAGE') message: string) {
+  //   this.message = message;
+  // }
 }

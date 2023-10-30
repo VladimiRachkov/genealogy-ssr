@@ -37,7 +37,11 @@
                 "src/assets/scss"
               ]
             },
-            "scripts": []
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/odometer/odometer.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -108,7 +112,11 @@
               "src/styles.scss",
               "./node_modules/odometer/themes/odometer-theme-train-station.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js",
+              "node_modules/odometer/odometer.js"
+            ]
           }
         },
         "server": {

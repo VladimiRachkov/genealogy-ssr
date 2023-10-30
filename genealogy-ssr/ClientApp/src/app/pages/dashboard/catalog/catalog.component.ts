@@ -18,14 +18,12 @@ import { METATYPE_ID } from 'app/enums/metatype';
 import { Observable } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { Pick } from 'app/helpers/json-parse';
-import { UntilDestroy } from '@ngneat/until-destroy';
 import { ModalComponent } from '@shared';
 import { DatePipe } from '@angular/common';
 import { isNil} from 'lodash';
 
 const metatypeId = METATYPE_ID.PRODUCT;
 
-@UntilDestroy()
 @Component({
   selector: 'dashboard-catalog',
   templateUrl: './catalog.component.html',

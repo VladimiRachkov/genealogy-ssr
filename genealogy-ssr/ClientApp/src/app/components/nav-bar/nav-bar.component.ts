@@ -6,8 +6,9 @@ import { PageState, MainState } from '@states';
 import { AuthenticationService } from '@core';
 import { Observable } from 'rxjs';
 import { isNil } from 'lodash'; 
-import { untilDestroyed } from '@ngneat/until-destroy';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
+@UntilDestroy()
 @Component({
   selector: 'app-nav-bar',
   templateUrl: './nav-bar.component.html',

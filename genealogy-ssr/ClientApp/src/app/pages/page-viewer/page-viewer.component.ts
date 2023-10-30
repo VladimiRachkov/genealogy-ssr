@@ -7,8 +7,9 @@ import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { PageState } from '@states';
 import { StateReset } from 'ngxs-reset-plugin';
 import { isEmpty } from 'lodash';
-import { untilDestroyed } from '@ngneat/until-destroy';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
+@UntilDestroy()
 @Component({
   selector: 'app-viewer',
   templateUrl: './page-viewer.component.html',
