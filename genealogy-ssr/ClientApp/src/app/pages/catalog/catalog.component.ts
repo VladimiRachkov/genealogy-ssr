@@ -4,7 +4,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { CatalogState } from '@states';
 import { METATYPE_ID } from 'app/enums/metatype';
-import { Pick } from 'app/helpers/json-parse';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { PurchaseComponent } from './purchase/purchase.component';
@@ -24,9 +23,10 @@ export class CatalogComponent implements OnInit {
   @Select(CatalogState.list)
   list$: Observable<BusinessObject[]>;
 
-  @ViewChild(PurchaseComponent, { static: false }) purchaseModal: PurchaseComponent;
-
+  @Select(CatalogState.products)
   products$: Observable<CatalogItem[]>;
+
+  @ViewChild(PurchaseComponent, { static: false }) purchaseModal: PurchaseComponent;
 
   paginatorOptions: Paginator = {
     index: 0,
@@ -40,11 +40,11 @@ export class CatalogComponent implements OnInit {
   constructor(private store: Store, private apiService: ApiService) {}
 
   ngOnInit() {
-    this.list$.pipe(tap(() => this.updatePaginator()));
+    //this.list$.pipe(tap(() => this.updatePaginator()));
 
-    this.products$ = this.list$.pipe(
-      map<BusinessObject[], CatalogItem[]>(list => list.map(({ id, title, data }) => ({ id, title, ...this.parseJSON(data) })))
-    );
+    // this.products$ = this.list$.pipe(
+    //   map<BusinessObject[], CatalogItem[]>(list => list.map(({ id, title, data }) => ({ id, title, ...this.parseJSON(data) })))
+    // );
 
     this.updatePaginator();
   }
@@ -61,7 +61,6 @@ export class CatalogComponent implements OnInit {
 
   onChangePage(pageIndex: number) {
     const { step } = this.paginatorOptions;
-
     this.pageIndex = pageIndex;
     this.startIndex = pageIndex * step;
     this.fetchList(pageIndex);
@@ -77,19 +76,11 @@ export class CatalogComponent implements OnInit {
 
     this.paginatorOptions.index = index;
 
-    this.store.dispatch(new FetchCatalogList(params)).subscribe();
+    this.store.dispatch(new FetchCatalogList(params));
   }
 
   private updateItem(body: BusinessObjectOutDto) {
     this.store.dispatch(new UpdateCatalogItem(body)).subscribe(() => this.fetchList());
-  }
-
-  private parseJSON(data: string) {
-    return Pick(JSON.parse(data), {
-      imageUrl: String,
-      price: Number,
-      description: String,
-    });
   }
 
   private updatePaginator() {

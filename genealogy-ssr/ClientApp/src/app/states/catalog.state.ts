@@ -10,18 +10,20 @@ import {
 } from '@actions';
 import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BusinessObject, BusinessObjectInDto, BusinessObjectOutDto } from '@models';
+import { BusinessObject, BusinessObjectInDto, BusinessObjectOutDto, BusinessObjectsCountInDto, CatalogItem } from '@models';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { BusinessObjectService } from '@repository';
 import { switchMap, tap } from 'rxjs/operators';
 import { first } from 'lodash';
 import { ApiService } from '@core';
+import { Pick } from 'app/helpers/json-parse';
 
 export interface CatalogStateModel {
   item: BusinessObjectInDto;
   list: BusinessObjectInDto[];
   count: number;
   purchaseList: BusinessObjectInDto[];
+  products: CatalogItem[];
 }
 
 @State<CatalogStateModel>({
@@ -31,6 +33,7 @@ export interface CatalogStateModel {
     list: [],
     count: null,
     purchaseList: [],
+    products: []
   },
 })
 @Injectable()
@@ -55,6 +58,11 @@ export class CatalogState {
   @Selector()
   static purchaseList({ purchaseList }: CatalogStateModel): BusinessObject[] {
     return purchaseList;
+  }
+
+  @Selector()
+  static products({ list }: CatalogStateModel): CatalogItem[] {
+    return list.map(({ id, title, data }) => ({ id, title, ...CatalogState.parseJSON(data) }));
   }
 
   @Action(FetchCatalogList)
@@ -102,5 +110,13 @@ export class CatalogState {
   @Action(RemovePurchase)
   removePurchase(ctx: StateContext<CatalogStateModel>, { payload: id }) {
     return this.apiService.delete('purchase', id);
+  }
+
+  static parseJSON(data: string) {
+    return Pick(JSON.parse(data), {
+      imageUrl: String,
+      price: Number,
+      description: String,
+    });
   }
 }
